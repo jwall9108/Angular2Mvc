@@ -5,6 +5,8 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
 import { ObserverService } from "../Services/observer.service";
 import { Global } from "../Shared/global";
+import { LocationService } from "../Services/location.service";
+import { StateLocation } from "../Model/State/stateLocation";
 
 @Component({
     selector: 'location-component',
@@ -12,37 +14,27 @@ import { Global } from "../Shared/global";
 })
 
 export class LocationComponent implements OnInit, OnDestroy {
+
+    msg: any;
     @ViewChild('modal') modal: ModalComponent;
-    books: IBook[];
+    locations: StateLocation[];
     leadContactFrm: FormGroup;
     subscription: Subscription;
     item: number;
+    stateId: number;
 
-    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>) {
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ]
-        this.books.length;
-
+    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _locationService: LocationService) {
     }
 
     ngOnDestroy() {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    }
+
+    LoadLocations(stateId: string): void {
+        this._locationService.get(Global.BASE_LOCATION_ENDPOINT, stateId)
+            .subscribe(locations => { this.locations = locations; },
+            error => this.msg = <any>error);
     }
 
     ngOnInit(): void {
@@ -52,9 +44,12 @@ export class LocationComponent implements OnInit, OnDestroy {
             LastName: ['']
         });
 
-        this.subscription = this._stateService.sourceItem$.subscribe(item => {
-            console.log(item);
-            this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(id => {
+
+            if (id) {
+                this.stateId = id;
+                this.LoadLocations(id.toString());
+            }
         });
     }
 }

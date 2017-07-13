@@ -14,32 +14,21 @@ var modal_1 = require("ng2-bs3-modal/components/modal");
 var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
+var location_service_1 = require("../Services/location.service");
 var LocationComponent = (function () {
-    function LocationComponent(fb, _stateService) {
+    function LocationComponent(fb, _stateService, _locationService) {
         this.fb = fb;
         this._stateService = _stateService;
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ];
-        this.books.length;
+        this._locationService = _locationService;
     }
     LocationComponent.prototype.ngOnDestroy = function () {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    };
+    LocationComponent.prototype.LoadLocations = function (stateId) {
+        var _this = this;
+        this._locationService.get(global_1.Global.BASE_LOCATION_ENDPOINT, stateId)
+            .subscribe(function (locations) { _this.locations = locations; }, function (error) { return _this.msg = error; });
     };
     LocationComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -48,9 +37,11 @@ var LocationComponent = (function () {
             FirstName: ['', forms_1.Validators.required],
             LastName: ['']
         });
-        this.subscription = this._stateService.sourceItem$.subscribe(function (item) {
-            console.log(item);
-            _this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(function (id) {
+            if (id) {
+                _this.stateId = id;
+                _this.LoadLocations(id.toString());
+            }
         });
     };
     return LocationComponent;
@@ -64,7 +55,7 @@ LocationComponent = __decorate([
         selector: 'location-component',
         templateUrl: global_1.Global.TEMPLATE_LOCATION + 'location.template.html'
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, location_service_1.LocationService])
 ], LocationComponent);
 exports.LocationComponent = LocationComponent;
 //# sourceMappingURL=location.component.js.map

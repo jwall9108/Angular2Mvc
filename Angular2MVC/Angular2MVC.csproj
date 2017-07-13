@@ -447,6 +447,7 @@
     <TypeScriptCompile Include="app\Model\State\state.ts" />
     <TypeScriptCompile Include="app\Model\user.ts" />
     <TypeScriptCompile Include="app\Services\leadContact.service.ts" />
+    <TypeScriptCompile Include="app\Services\location.service.ts" />
     <TypeScriptCompile Include="app\Services\observer.service.ts" />
     <TypeScriptCompile Include="app\Services\state.service.ts" />
     <TypeScriptCompile Include="app\Services\user.service.ts" />
