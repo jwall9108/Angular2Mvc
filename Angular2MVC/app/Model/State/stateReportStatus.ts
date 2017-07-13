@@ -1,8 +1,6 @@
-﻿import { ReportStatus } from "../../Shared/enum";
-
-export class StateLocation
+﻿export class ReportStatus
 {
-    Status: ReportStatus;
+    Status: string;
     Id: number;
     ReportName: string;
     LastSent: Date;

@@ -14,32 +14,21 @@ var modal_1 = require("ng2-bs3-modal/components/modal");
 var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
+var genericUtility_service_1 = require("../Services/genericUtility.service");
 var TechnicalContactComponent = (function () {
-    function TechnicalContactComponent(fb, _stateService) {
+    function TechnicalContactComponent(fb, _stateService, _technicalContactService) {
         this.fb = fb;
         this._stateService = _stateService;
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ];
-        this.books.length;
+        this._technicalContactService = _technicalContactService;
     }
     TechnicalContactComponent.prototype.ngOnDestroy = function () {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    };
+    TechnicalContactComponent.prototype.LoadTechnicalContacts = function (stateId) {
+        var _this = this;
+        this._technicalContactService.getArray(global_1.Global.BASE_TECHNICALCONTACT_ENDPOINT, stateId)
+            .subscribe(function (contacts) { _this.contacts = contacts; }, function (error) { return _this.msg = error; });
     };
     TechnicalContactComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -48,9 +37,11 @@ var TechnicalContactComponent = (function () {
             FirstName: ['', forms_1.Validators.required],
             LastName: ['']
         });
-        this.subscription = this._stateService.sourceItem$.subscribe(function (item) {
-            console.log(item);
-            _this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(function (id) {
+            if (id) {
+                _this.stateId = id;
+                _this.LoadTechnicalContacts(id.toString());
+            }
         });
     };
     return TechnicalContactComponent;
@@ -64,7 +55,7 @@ TechnicalContactComponent = __decorate([
         selector: 'technicalContact-component',
         templateUrl: global_1.Global.TEMPLATE_LOCATION + 'technicalContact.template.html'
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, genericUtility_service_1.GenericUtilityService])
 ], TechnicalContactComponent);
 exports.TechnicalContactComponent = TechnicalContactComponent;
 //# sourceMappingURL=technicalContact.component.js.map

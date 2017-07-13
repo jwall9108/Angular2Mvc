@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var StateLocation = (function () {
-    function StateLocation() {
+var ReportStatus = (function () {
+    function ReportStatus() {
     }
-    return StateLocation;
+    return ReportStatus;
 }());
-exports.StateLocation = StateLocation;
+exports.ReportStatus = ReportStatus;
 //# sourceMappingURL=stateReportStatus.js.map

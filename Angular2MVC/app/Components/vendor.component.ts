@@ -5,6 +5,8 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
 import { ObserverService } from "../Services/observer.service";
 import { Global } from "../Shared/global";
+import { GenericUtilityService } from "../Services/genericUtility.service";
+import { Vendor } from "../Model/State/Vendor";
 
 @Component({
     selector: 'vendor-component',
@@ -12,37 +14,32 @@ import { Global } from "../Shared/global";
 })
 
 export class VendorComponent implements OnInit, OnDestroy {
+
+    stateId: number;
+    msg: any;
     @ViewChild('modal') modal: ModalComponent;
-    books: IBook[];
+    vendors: Vendor[];
     leadContactFrm: FormGroup;
     subscription: Subscription;
     item: number;
 
-    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>) {
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ]
-        this.books.length;
+    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _vendorService: GenericUtilityService<Vendor>) {
 
     }
 
     ngOnDestroy() {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    }
+
+    LoadVendors(stateId: string): void {
+        this._vendorService.getArray(Global.BASE_VENDOR_ENDPOINT, stateId)
+            .subscribe(vendors => {
+                this.vendors = vendors;
+                console.log(vendors);
+                console.log(this.vendors);
+            },
+            error => this.msg = <any>error);
     }
 
     ngOnInit(): void {
@@ -52,9 +49,11 @@ export class VendorComponent implements OnInit, OnDestroy {
             LastName: ['']
         });
 
-        this.subscription = this._stateService.sourceItem$.subscribe(item => {
-            console.log(item);
-            this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(id => {
+            if (id) {
+                this.stateId = id;
+                this.LoadVendors(id.toString());
+            }
         });
     }
 }

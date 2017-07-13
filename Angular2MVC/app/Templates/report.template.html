@@ -1,13 +1,29 @@
-﻿<div class="panel panel-default">
+﻿<div class="panel panel-info" style="min-height: 300px">
     <div class="panel-heading">
-        <h3 class="panel-title">Reports (State Id: <strong>{{item}})</strong></h3>
+        <h3 class="panel-title">Reports</h3>
         <span class="pull-right collapsePanel" style="margin-top: -20px; cursor:pointer"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
-    <div class="panel-body" *ngFor="let book of books">
-        <div class="row col-lg-12">
-            <h4> Title : {{book.title}} </h4> <h4>Price: {{book.price}}</h4>
-            <button title="Edit" class="btn btn-primary" (click)="editUser(book.id)">Edit</button>
-        </div>
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Report</th>
+                    <th>Last Sent</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr *ngFor="let report of reports; let i = index">
+      
+                    <td>{{report.ReportName}}</td>
+                    <td>{{report.LastSent | date: 'MM/dd/yyyy'}}</td>
+                    <td>
+                        <span [ngClass]="(report.Status=='Late')?'label label-danger':'label label-success'">{{report.Status}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 

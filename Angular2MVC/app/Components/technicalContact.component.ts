@@ -5,6 +5,8 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs/Subscription";
 import { ObserverService } from "../Services/observer.service";
 import { Global } from "../Shared/global";
+import { GenericUtilityService } from "../Services/genericUtility.service";
+import { TechnicalContact } from "../Model/State/technicalContact";
 
 @Component({
     selector: 'technicalContact-component',
@@ -12,37 +14,27 @@ import { Global } from "../Shared/global";
 })
 
 export class TechnicalContactComponent implements OnInit, OnDestroy {
+
+    stateId: number;
+    msg: any;
     @ViewChild('modal') modal: ModalComponent;
-    books: IBook[];
+    contacts: TechnicalContact[];
     leadContactFrm: FormGroup;
     subscription: Subscription;
-    item: number;
 
-    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>) {
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ]
-        this.books.length;
+    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _technicalContactService: GenericUtilityService<TechnicalContact>) {
 
     }
 
     ngOnDestroy() {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    }
+
+    LoadTechnicalContacts(stateId: string): void {
+        this._technicalContactService.getArray(Global.BASE_TECHNICALCONTACT_ENDPOINT, stateId)
+            .subscribe(contacts => { this.contacts = contacts; },
+            error => this.msg = <any>error);
     }
 
     ngOnInit(): void {
@@ -52,9 +44,11 @@ export class TechnicalContactComponent implements OnInit, OnDestroy {
             LastName: ['']
         });
 
-        this.subscription = this._stateService.sourceItem$.subscribe(item => {
-            console.log(item);
-            this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(id => {
+            if (id) {
+                this.stateId = id;
+                this.LoadTechnicalContacts(id.toString());
+            }
         });
     }
 }

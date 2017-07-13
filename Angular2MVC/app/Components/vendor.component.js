@@ -14,32 +14,25 @@ var modal_1 = require("ng2-bs3-modal/components/modal");
 var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
+var genericUtility_service_1 = require("../Services/genericUtility.service");
 var VendorComponent = (function () {
-    function VendorComponent(fb, _stateService) {
+    function VendorComponent(fb, _stateService, _vendorService) {
         this.fb = fb;
         this._stateService = _stateService;
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ];
-        this.books.length;
+        this._vendorService = _vendorService;
     }
     VendorComponent.prototype.ngOnDestroy = function () {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    };
+    VendorComponent.prototype.LoadVendors = function (stateId) {
+        var _this = this;
+        this._vendorService.getArray(global_1.Global.BASE_VENDOR_ENDPOINT, stateId)
+            .subscribe(function (vendors) {
+            _this.vendors = vendors;
+            console.log(vendors);
+            console.log(_this.vendors);
+        }, function (error) { return _this.msg = error; });
     };
     VendorComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -48,9 +41,11 @@ var VendorComponent = (function () {
             FirstName: ['', forms_1.Validators.required],
             LastName: ['']
         });
-        this.subscription = this._stateService.sourceItem$.subscribe(function (item) {
-            console.log(item);
-            _this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(function (id) {
+            if (id) {
+                _this.stateId = id;
+                _this.LoadVendors(id.toString());
+            }
         });
     };
     return VendorComponent;
@@ -64,7 +59,7 @@ VendorComponent = __decorate([
         selector: 'vendor-component',
         templateUrl: global_1.Global.TEMPLATE_LOCATION + 'vendor.template.html'
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, genericUtility_service_1.GenericUtilityService])
 ], VendorComponent);
 exports.VendorComponent = VendorComponent;
 //# sourceMappingURL=vendor.component.js.map

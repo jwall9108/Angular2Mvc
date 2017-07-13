@@ -6,7 +6,7 @@
 <br />
 
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-2" *ngIf="selectedState.Abbreviation">
         <img [src]="'app/Assets/Images/' + selectedState.Abbreviation + '.png'" alt="IMAGES" style="width: 140px; height: 100px;" />
     </div>
 

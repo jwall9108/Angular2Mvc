@@ -163,6 +163,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BaseAPIController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TechnicalContactController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -443,6 +444,7 @@
     <TypeScriptCompile Include="app\Model\State\stateLocation.ts" />
     <TypeScriptCompile Include="app\Model\State\leadContact.ts" />
     <TypeScriptCompile Include="app\Model\State\technicalContact.ts" />
+    <TypeScriptCompile Include="app\Model\State\Vendor.ts" />
     <TypeScriptCompile Include="app\Model\State\vendorContact.ts" />
     <TypeScriptCompile Include="app\Model\State\state.ts" />
     <TypeScriptCompile Include="app\Model\user.ts" />

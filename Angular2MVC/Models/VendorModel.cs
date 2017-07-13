@@ -8,7 +8,7 @@ namespace Angular2MVC.Models
 {
     public class VendorModel
     {
-        public IEnumerable<VendorContactModel> ContactInformation { get; set; }
+        public IEnumerable<VendorContactModel> Contacts { get; set; }
 
         public string Vendor { get; set; }
 
@@ -19,7 +19,7 @@ namespace Angular2MVC.Models
         public VendorModel(Vendor vendor, IEnumerable<StateVendorContact> vendorContacts)
         {
             Vendor = vendor.VendorName;
-            ContactInformation = vendorContacts.Select(x => new VendorContactModel(x.VendorContact)).ToList();
+            Contacts = vendorContacts.Select(x => new VendorContactModel(x.VendorContact)).ToList();
         }
     }
 }

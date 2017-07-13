@@ -14,32 +14,21 @@ var modal_1 = require("ng2-bs3-modal/components/modal");
 var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
+var genericUtility_service_1 = require("../Services/genericUtility.service");
 var ReportComponent = (function () {
-    function ReportComponent(fb, _stateService) {
+    function ReportComponent(fb, _stateService, _technicalContactService) {
         this.fb = fb;
         this._stateService = _stateService;
-        this.books = [
-            {
-                id: 0,
-                title: 'Maryland',
-                price: 'Rs. 1400'
-            },
-            {
-                id: 1,
-                title: 'California',
-                price: 'Rs. 1700'
-            },
-            {
-                id: 2,
-                title: 'Georgia',
-                price: 'Rs. 1000'
-            }
-        ];
-        this.books.length;
+        this._technicalContactService = _technicalContactService;
     }
     ReportComponent.prototype.ngOnDestroy = function () {
         // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    };
+    ReportComponent.prototype.LoadReports = function (stateId) {
+        var _this = this;
+        this._technicalContactService.getArray(global_1.Global.BASE_REPORT_ENDPOINT, stateId)
+            .subscribe(function (reports) { _this.reports = reports; }, function (error) { return _this.msg = error; });
     };
     ReportComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -48,9 +37,11 @@ var ReportComponent = (function () {
             FirstName: ['', forms_1.Validators.required],
             LastName: ['']
         });
-        this.subscription = this._stateService.sourceItem$.subscribe(function (item) {
-            console.log(item);
-            _this.item = item;
+        this.subscription = this._stateService.sourceItem$.subscribe(function (id) {
+            if (id) {
+                _this.stateId = id;
+                _this.LoadReports(id.toString());
+            }
         });
     };
     return ReportComponent;
@@ -64,7 +55,7 @@ ReportComponent = __decorate([
         selector: 'report-component',
         templateUrl: global_1.Global.TEMPLATE_LOCATION + 'report.template.html'
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, genericUtility_service_1.GenericUtilityService])
 ], ReportComponent);
 exports.ReportComponent = ReportComponent;
 //# sourceMappingURL=report.component.js.map

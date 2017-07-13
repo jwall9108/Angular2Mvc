@@ -14,7 +14,7 @@ var modal_1 = require("ng2-bs3-modal/components/modal");
 var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
-var location_service_1 = require("../Services/location.service");
+var genericUtility_service_1 = require("../Services/genericUtility.service");
 var LocationComponent = (function () {
     function LocationComponent(fb, _stateService, _locationService) {
         this.fb = fb;
@@ -27,7 +27,7 @@ var LocationComponent = (function () {
     };
     LocationComponent.prototype.LoadLocations = function (stateId) {
         var _this = this;
-        this._locationService.get(global_1.Global.BASE_LOCATION_ENDPOINT, stateId)
+        this._locationService.getArray(global_1.Global.BASE_LOCATION_ENDPOINT, stateId)
             .subscribe(function (locations) { _this.locations = locations; }, function (error) { return _this.msg = error; });
     };
     LocationComponent.prototype.ngOnInit = function () {
@@ -55,7 +55,7 @@ LocationComponent = __decorate([
         selector: 'location-component',
         templateUrl: global_1.Global.TEMPLATE_LOCATION + 'location.template.html'
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, location_service_1.LocationService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, genericUtility_service_1.GenericUtilityService])
 ], LocationComponent);
 exports.LocationComponent = LocationComponent;
 //# sourceMappingURL=location.component.js.map

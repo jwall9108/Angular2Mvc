@@ -7,6 +7,7 @@ import { ObserverService } from "../Services/observer.service";
 import { Global } from "../Shared/global";
 import { LocationService } from "../Services/location.service";
 import { StateLocation } from "../Model/State/stateLocation";
+import { GenericUtilityService } from "../Services/genericUtility.service";
 
 @Component({
     selector: 'location-component',
@@ -23,7 +24,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     item: number;
     stateId: number;
 
-    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _locationService: LocationService) {
+    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _locationService: GenericUtilityService<StateLocation>) {
     }
 
     ngOnDestroy() {
@@ -32,7 +33,7 @@ export class LocationComponent implements OnInit, OnDestroy {
     }
 
     LoadLocations(stateId: string): void {
-        this._locationService.get(Global.BASE_LOCATION_ENDPOINT, stateId)
+        this._locationService.getArray(Global.BASE_LOCATION_ENDPOINT, stateId)
             .subscribe(locations => { this.locations = locations; },
             error => this.msg = <any>error);
     }

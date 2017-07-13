@@ -1,5 +1,8 @@
 ﻿using Angular2MVC.Code;
 using Angular2MVC.DBContext;
+using Angular2MVC.Models;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 
@@ -20,9 +23,18 @@ namespace Angular2MVC.Controllers
         }
 
         // GET api/<controller>/5
-        public void Get(int id)
+        public HttpResponseMessage Get(int id)
         {
+            var state = stateRepository.GetStateById(id);
 
+            List<StateReportStatusModel> reports = new List<StateReportStatusModel>
+            {
+                new StateReportStatusModel(state.AssessmentReports.FirstOrDefault()),
+                new StateReportStatusModel(state.DemographicDataReports.FirstOrDefault()),
+                new StateReportStatusModel(state.LastUpdateReports.FirstOrDefault())
+            };
+
+            return ToJson(reports);
         }
 
         // POST api/<controller>
