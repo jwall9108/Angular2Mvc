@@ -4,8 +4,8 @@
         <h3 class="panel-title">Location (State Id: <strong>{{item}})</strong></h3>
         <span class="pull-right collapsePanel" style="margin-top: -20px; cursor:pointer"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
-    <div class="panel-body" *ngFor="let book of books">
-        <div class="row col-lg-12">
+    <div class="panel-body" >
+        <div class="row col-lg-12" *ngFor="let book of books">
             <h4> Title : {{book.title}} </h4> <h4>Price: {{book.price}}</h4>
             <button title="Edit" class="btn btn-primary" (click)="editUser(book.id)">Edit</button>
         </div>

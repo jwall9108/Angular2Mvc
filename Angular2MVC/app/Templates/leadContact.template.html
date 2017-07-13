@@ -3,7 +3,17 @@
         <h3 class="panel-title">Lead Contacts (State Id: <strong>{{item}})</strong></h3>
         <span class="pull-right collapsePanel" style="margin-top: -20px; cursor:pointer"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
-    <div class="panel-body" >
+    <div class="panel-body">
+        <div class="row " style="padding-bottom:10px">
+            <div class="col-sm-2">
+                <div class="btn btn-default">Add <i class="glyphicon glyphicon-plus"></i></div>
+            </div>
+        </div>
+        <div *ngIf='contacts && contacts.length==0' class="alert alert-info alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button> No contacts found!
+        </div>
         <div *ngFor="let contact of contacts; let i = index">
             <div class="row">
                 <label class="col-sm-2 control-label">Name:</label>
@@ -49,7 +59,7 @@
             </div>
             <button title="Edit" class="btn btn-primary">Edit</button>
             <button title="Delete" class="btn btn-danger">Delete</button>
-            <hr *ngIf='contacts.length - 1 != i' style="border-width:5px"/>
+            <hr *ngIf='contacts.length - 1 != i' style="border-width:5px" />
         </div>
     </div>
 </div>

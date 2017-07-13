@@ -1,5 +1,7 @@
 ﻿using Angular2MVC.Code;
 using Angular2MVC.DBContext;
+using Angular2MVC.Models;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 
@@ -22,9 +24,10 @@ namespace Angular2MVC.Controllers
         }
 
         // GET api/<controller>/5
-        public void Get(int id)
+        public HttpResponseMessage Get(int id)
         {
-
+            var contacts = stateRepository.GetStateById(id).StateVendorContacts.Select(x => new VendorContactModel(x.VendorContact)).ToList();
+            return ToJson(contacts);
         }
 
         // POST api/<controller>

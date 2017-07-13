@@ -15,7 +15,7 @@ namespace Angular2MVC.Models
 
         public DateTime LastSent { get; set; }
 
-        public ReportStatus Status { get; set; }
+        public string Status { get; set; }
 
 
         public StateReportStatusModel() {
@@ -43,12 +43,12 @@ namespace Angular2MVC.Models
             Status = GetStatus(report.Late);
         }
 
-        private ReportStatus GetStatus(string status) {
+        private string GetStatus(string status) {
             if (status == "Late")
             {
-                return ReportStatus.Late;
+                return ReportStatus.Late.ToString();
             }
-            return ReportStatus.Submitting;
+            return ReportStatus.Submitting.ToString();
         }
     }
 }

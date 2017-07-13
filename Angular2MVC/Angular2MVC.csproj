@@ -165,7 +165,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
-    <Compile Include="Controllers\VendorContactController - Copy.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\VendorContactController.cs" />
     <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Controllers\LeadContactController.cs" />
