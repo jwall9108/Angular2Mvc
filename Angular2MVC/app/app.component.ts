@@ -2,6 +2,7 @@
 import { Global } from "./Shared/global";
 import './Assets/Index.js';
 
+
 @Component({
     selector: "stateDashboard-app",
     templateUrl: 'app/index.html'

@@ -1,9 +1,28 @@
-﻿<div class="panel panel-info"  style="min-height: 300px">
+﻿<div class="panel panel-info" style="min-height: 300px">
     <div class="panel-heading">
         <h3 class="panel-title">State Characteristics</h3>
         <span class="pull-right collapsePanel" style="margin-top: -20px; cursor:pointer"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
-    <div class="panel-body" *ngFor="let book of books">
+
+
+    <div class="panel-body">
+        <div class="row">
+            <label class="col-sm-3 control-label">Population:</label>
+            <div class="col-sm-9">
+                <input type="hidden" value="1000" id="State_Characteristics_Population"/>
+                1000
+            </div>
+        </div>
+
+        <div class="row">
+            <label class="col-sm-3 control-label">Student Count:</label>
+            <div class="col-sm-9">
+                <input type="hidden" value="100" id="State_Characteristics_StudentCount" />
+                100
+            </div>
+        </div>
+
+        <div id="populationGraph" class="pull-right" style="height:300px; width:600px"></div>
 
     </div>
 </div>

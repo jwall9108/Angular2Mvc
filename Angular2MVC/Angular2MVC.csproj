@@ -259,6 +259,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\Assets\D3\d3.js" />
+    <Content Include="app\Assets\D3\d3.min.js" />
+    <Content Include="app\Assets\D3\d3plus.full.js" />
+    <Content Include="app\Assets\D3\d3plus.full.min.js" />
+    <Content Include="app\Assets\D3\d3plus.js" />
+    <Content Include="app\Assets\D3\d3plus.min.js" />
+    <Content Include="app\Assets\D3\topojson.js" />
+    <Content Include="app\Assets\D3\topojson.min.js" />
     <Content Include="app\Assets\Images\ak.png" />
     <Content Include="app\Assets\Images\al.png" />
     <Content Include="app\Assets\Images\ar.png" />
