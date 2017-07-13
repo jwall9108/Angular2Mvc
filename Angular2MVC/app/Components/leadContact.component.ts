@@ -7,6 +7,7 @@ import { ObserverService } from "../Services/observer.service";
 import { Global } from "../Shared/global";
 import { LeadContact } from "../Model/State/leadContact";
 import { LeadContactService } from "../Services/leadContact.service";
+import { GenericUtilityService } from "../Services/genericUtility.service";
 
 @Component({
     selector: 'leadContact-component',
@@ -21,7 +22,7 @@ export class LeadContactComponent implements OnInit, OnDestroy {
     subscription: Subscription;
     stateId: number;
 
-    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _leadContactService: LeadContactService) {
+    constructor(private fb: FormBuilder, private _stateService: ObserverService<number>, private _leadContactService: GenericUtilityService<LeadContact>) {
 
     }
 
@@ -30,13 +31,11 @@ export class LeadContactComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-
     LoadContacts(stateId: string): void {
-        this._leadContactService.get(Global.BASE_CONTACT_ENDPOINT, stateId)
+        this._leadContactService.getArray(Global.BASE_CONTACT_ENDPOINT, stateId)
             .subscribe(contacts => { this.contacts = contacts; },
             error => this.msg = <any>error);
     }
-
 
     ngOnInit(): void {
         this.leadContactFrm = this.fb.group({

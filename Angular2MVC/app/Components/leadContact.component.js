@@ -14,7 +14,7 @@ var modal_1 = require("ng2-bs3-modal/components/modal");
 var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
-var leadContact_service_1 = require("../Services/leadContact.service");
+var genericUtility_service_1 = require("../Services/genericUtility.service");
 var LeadContactComponent = (function () {
     function LeadContactComponent(fb, _stateService, _leadContactService) {
         this.fb = fb;
@@ -27,7 +27,7 @@ var LeadContactComponent = (function () {
     };
     LeadContactComponent.prototype.LoadContacts = function (stateId) {
         var _this = this;
-        this._leadContactService.get(global_1.Global.BASE_CONTACT_ENDPOINT, stateId)
+        this._leadContactService.getArray(global_1.Global.BASE_CONTACT_ENDPOINT, stateId)
             .subscribe(function (contacts) { _this.contacts = contacts; }, function (error) { return _this.msg = error; });
     };
     LeadContactComponent.prototype.ngOnInit = function () {
@@ -55,7 +55,7 @@ LeadContactComponent = __decorate([
         selector: 'leadContact-component',
         templateUrl: global_1.Global.TEMPLATE_LOCATION + 'leadContact.template.html'
     }),
-    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, leadContact_service_1.LeadContactService])
+    __metadata("design:paramtypes", [forms_1.FormBuilder, observer_service_1.ObserverService, genericUtility_service_1.GenericUtilityService])
 ], LeadContactComponent);
 exports.LeadContactComponent = LeadContactComponent;
 //# sourceMappingURL=leadContact.component.js.map

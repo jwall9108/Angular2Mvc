@@ -446,10 +446,12 @@
     <TypeScriptCompile Include="app\Model\State\vendorContact.ts" />
     <TypeScriptCompile Include="app\Model\State\state.ts" />
     <TypeScriptCompile Include="app\Model\user.ts" />
+    <TypeScriptCompile Include="app\Services\genericUtility.service.ts" />
     <TypeScriptCompile Include="app\Services\leadContact.service.ts" />
     <TypeScriptCompile Include="app\Services\location.service.ts" />
     <TypeScriptCompile Include="app\Services\observer.service.ts" />
     <TypeScriptCompile Include="app\Services\state.service.ts" />
+    <TypeScriptCompile Include="app\Services\technicalContact.service.ts" />
     <TypeScriptCompile Include="app\Services\user.service.ts" />
     <TypeScriptCompile Include="app\Shared\enum.ts" />
     <TypeScriptCompile Include="app\Shared\global.ts" />
