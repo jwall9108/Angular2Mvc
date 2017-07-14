@@ -36,8 +36,6 @@ export class VendorComponent implements OnInit, OnDestroy {
         this._vendorService.getArray(Global.BASE_VENDOR_ENDPOINT, stateId)
             .subscribe(vendors => {
                 this.vendors = vendors;
-                console.log(vendors);
-                console.log(this.vendors);
             },
             error => this.msg = <any>error);
     }
