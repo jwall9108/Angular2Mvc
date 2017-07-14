@@ -1,9 +1,16 @@
 ﻿<div class="panel panel-info" style="min-height: 300px">
+
     <div class="panel-heading">
         <h3 class="panel-title">Lead Contacts</h3>
         <span class="pull-right collapsePanel" style="margin-top: -20px; cursor:pointer"><i class="glyphicon glyphicon-chevron-up"></i></span>
     </div>
     <div class="panel-body">
+        <div *ngIf="msg" role="alert" class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {{msg}}
+        </div>
         <div class="row " style="padding-bottom:10px">
             <div class="col-sm-2">
                 <div class="btn btn-default">Add <i class="glyphicon glyphicon-plus"></i></div>
@@ -49,43 +56,55 @@
 
             </div>
             <div class="row">
-
-            </div>
-            <div class="row">
                 <label class="col-sm-2 control-label">Additional:</label>
                 <div class="col-sm-10">
                     {{contact.AdditionalInfo}}
                 </div>
             </div>
-            <button title="Edit" class="btn btn-primary">Edit</button>
+            <button title="Edit" class="btn btn-primary" (click)="editUser(contact.Id)">Edit</button>
             <button title="Delete" class="btn btn-danger">Delete</button>
             <hr *ngIf='contacts.length - 1 != i' style="border-width:5px" />
         </div>
     </div>
 </div>
 
-<modal #modal>
+<modal #leadContactModal>
     <form novalidate (ngSubmit)="onSubmit(leadContactFrm)" [formGroup]="leadContactFrm">
         <modal-header [show-close]="true">
             <h4 class="modal-title">sssss</h4>
         </modal-header>
         <modal-body>
-
             <div class="form-group">
                 <div>
-                    <span>Full name*</span>
-                    <input type="text" class="form-control" placeholder="First Name" formControlName="FirstName">
+                    <span>Name</span>
+                    <input type="text" class="form-control" placeholder="Name" formControlName="Name">
                 </div>
                 <div>
-                    <span>Full name</span>
-                    <input type="text" class="form-control" placeholder="Last Name" formControlName="LastName">
+                    <span>Role</span>
+                    <input type="text" class="form-control" placeholder="Role" formControlName="Role">
+                </div>
+                <div>
+                    <span>Phone</span>
+                    <input type="text" class="form-control" placeholder="Phone" formControlName="Phone">
+                </div>
+                <div>
+                    <span>Email</span>
+                    <input type="text" class="form-control" placeholder="Email" formControlName="Email">
+                </div>
+                <div>
+                    <span>Fax</span>
+                    <input type="text" class="form-control" placeholder="Fax" formControlName="Fax">
+                </div>
+                <div>
+                    <span>AdditionalInfo</span>
+                    <input type="text" class="form-control" placeholder="AdditionalInfo" formControlName="AdditionalInfo">
                 </div>
             </div>
         </modal-body>
         <modal-footer>
             <div>
                 <a class="btn btn-default" (click)="modal.dismiss()">Cancel</a>
-                <button type="submit" [disabled]="leadContactFrm.invalid" class="btn btn-primary"><!--{{modalBtnTitle}}--></button>
+                <button type="submit" [disabled]="leadContactFrm.invalid" class="btn btn-primary">{{modalBtnTitle}}</button>
             </div>
         </modal-footer>
     </form>

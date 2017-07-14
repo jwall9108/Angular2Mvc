@@ -18,8 +18,6 @@ namespace Angular2MVC.Models
 
         public string AdditionalInfo { get; set; }
 
-        public string TechnicalContact { get; set; }
-
 
         public StateContactModel()
         {

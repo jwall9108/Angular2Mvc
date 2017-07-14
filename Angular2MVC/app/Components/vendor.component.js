@@ -30,8 +30,6 @@ var VendorComponent = (function () {
         this._vendorService.getArray(global_1.Global.BASE_VENDOR_ENDPOINT, stateId)
             .subscribe(function (vendors) {
             _this.vendors = vendors;
-            console.log(vendors);
-            console.log(_this.vendors);
         }, function (error) { return _this.msg = error; });
     };
     VendorComponent.prototype.ngOnInit = function () {

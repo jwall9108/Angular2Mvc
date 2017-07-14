@@ -40,9 +40,9 @@ namespace Angular2MVC.Code
         //    context.Entry(student).State = States.Modified;
         //}
 
-        public void Save()
+        public int Save()
         {
-            context.SaveChanges();
+            return context.SaveChanges();
         }
 
         private bool disposed = false;

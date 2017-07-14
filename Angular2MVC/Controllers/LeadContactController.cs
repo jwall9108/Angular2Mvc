@@ -28,19 +28,28 @@ namespace Angular2MVC.Controllers
             return ToJson(contacts);
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
+        //public HttpResponseMessage Post([FromBody]TblUser value)
+        //{
+        //    UserDB.TblUsers.Add(value);
+        //    return ToJson(UserDB.SaveChanges());
+        //}
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        public HttpResponseMessage Put(int id, [FromBody]StateContactModel value)
         {
-        }
+            var contact = stateRepository.GetStates().SelectMany(x => x.StateLeadContacts).FirstOrDefault(x => x.LeadContactId == id);
+            contact.Name = value.Name;
+            contact.Phone_ = value.Phone;
+            contact.Role = value.Role;
+            contact.Email = value.Email;
+            contact.Additional = value.AdditionalInfo;
+            contact.Fax = value.Fax;
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
+            return ToJson(stateRepository.Save());
+        }
+        public HttpResponseMessage Delete(int id)
         {
+            UserDB.TblUsers.Remove(UserDB.TblUsers.FirstOrDefault(x => x.Id == id));
+            return ToJson(UserDB.SaveChanges());
         }
     }
 }

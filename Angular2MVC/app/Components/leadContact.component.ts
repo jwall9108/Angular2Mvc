@@ -8,6 +8,7 @@ import { Global } from "../Shared/global";
 import { LeadContact } from "../Model/State/leadContact";
 import { LeadContactService } from "../Services/leadContact.service";
 import { GenericUtilityService } from "../Services/genericUtility.service";
+import { DBOperation } from "../Shared/enum";
 
 @Component({
     selector: 'leadContact-component',
@@ -15,8 +16,13 @@ import { GenericUtilityService } from "../Services/genericUtility.service";
 })
 
 export class LeadContactComponent implements OnInit, OnDestroy {
+
+    dbops: DBOperation;
+    contact: LeadContact;
+    modalBtnTitle: string;
+    modalTitle: string;
     msg: any;
-    @ViewChild('modal') modal: ModalComponent;
+    @ViewChild('leadContactModal') modal: ModalComponent;
     contacts: LeadContact[];
     leadContactFrm: FormGroup;
     subscription: Subscription;
@@ -37,11 +43,24 @@ export class LeadContactComponent implements OnInit, OnDestroy {
             error => this.msg = <any>error);
     }
 
+    editUser(id: number) {
+        this.dbops = DBOperation.update;
+        this.modalTitle = "Edit User";
+        this.modalBtnTitle = "Update";
+        this.contact = this.contacts.filter(x => x.Id == id)[0];
+        this.leadContactFrm.setValue(this.contact);
+        this.modal.open();
+    }
+
     ngOnInit(): void {
         this.leadContactFrm = this.fb.group({
             Id: [''],
-            FirstName: ['', Validators.required],
-            LastName: ['']
+            Name: ['', Validators.required],
+            Role: [''],
+            Phone: [''],
+            Email: ['', Validators.required],
+            Fax: [''],
+            AdditionalInfo: []
         });
 
         this.subscription = this._stateService.sourceItem$.subscribe(id => {
@@ -51,5 +70,31 @@ export class LeadContactComponent implements OnInit, OnDestroy {
                 this.LoadContacts(id.toString());
             }
         });
+    }
+
+    onSubmit(formData: any) {
+        this.msg = "";
+
+        switch (this.dbops) {
+            case DBOperation.update:
+                this._leadContactService.put(Global.BASE_CONTACT_ENDPOINT, formData._value.Id, formData._value).subscribe(
+                    data => {
+                        if (data == 1) //Success
+                        {
+                            this.msg = "Data successfully updated.";
+                            this.LoadContacts(this.stateId.toString());
+                        }
+                        else {
+                            this.msg = "There is some issue in saving records, please contact to system administrator!"
+                        }
+
+                        this.modal.dismiss();
+                    },
+                    error => {
+                        this.msg = error;
+                    }
+                );
+                break;
+        }
     }
 }

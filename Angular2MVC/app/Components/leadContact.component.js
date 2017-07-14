@@ -15,6 +15,7 @@ var core_1 = require("@angular/core");
 var observer_service_1 = require("../Services/observer.service");
 var global_1 = require("../Shared/global");
 var genericUtility_service_1 = require("../Services/genericUtility.service");
+var enum_1 = require("../Shared/enum");
 var LeadContactComponent = (function () {
     function LeadContactComponent(fb, _stateService, _leadContactService) {
         this.fb = fb;
@@ -30,12 +31,24 @@ var LeadContactComponent = (function () {
         this._leadContactService.getArray(global_1.Global.BASE_CONTACT_ENDPOINT, stateId)
             .subscribe(function (contacts) { _this.contacts = contacts; }, function (error) { return _this.msg = error; });
     };
+    LeadContactComponent.prototype.editUser = function (id) {
+        this.dbops = enum_1.DBOperation.update;
+        this.modalTitle = "Edit User";
+        this.modalBtnTitle = "Update";
+        this.contact = this.contacts.filter(function (x) { return x.Id == id; })[0];
+        this.leadContactFrm.setValue(this.contact);
+        this.modal.open();
+    };
     LeadContactComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.leadContactFrm = this.fb.group({
             Id: [''],
-            FirstName: ['', forms_1.Validators.required],
-            LastName: ['']
+            Name: ['', forms_1.Validators.required],
+            Role: [''],
+            Phone: [''],
+            Email: ['', forms_1.Validators.required],
+            Fax: [''],
+            AdditionalInfo: []
         });
         this.subscription = this._stateService.sourceItem$.subscribe(function (id) {
             if (id) {
@@ -44,10 +57,30 @@ var LeadContactComponent = (function () {
             }
         });
     };
+    LeadContactComponent.prototype.onSubmit = function (formData) {
+        var _this = this;
+        this.msg = "";
+        switch (this.dbops) {
+            case enum_1.DBOperation.update:
+                this._leadContactService.put(global_1.Global.BASE_CONTACT_ENDPOINT, formData._value.Id, formData._value).subscribe(function (data) {
+                    if (data == 1) {
+                        _this.msg = "Data successfully updated.";
+                        _this.LoadContacts(_this.stateId.toString());
+                    }
+                    else {
+                        _this.msg = "There is some issue in saving records, please contact to system administrator!";
+                    }
+                    _this.modal.dismiss();
+                }, function (error) {
+                    _this.msg = error;
+                });
+                break;
+        }
+    };
     return LeadContactComponent;
 }());
 __decorate([
-    core_1.ViewChild('modal'),
+    core_1.ViewChild('leadContactModal'),
     __metadata("design:type", modal_1.ModalComponent)
 ], LeadContactComponent.prototype, "modal", void 0);
 LeadContactComponent = __decorate([
