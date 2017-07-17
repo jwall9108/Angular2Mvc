@@ -38,17 +38,37 @@ export class LeadContactComponent implements OnInit, OnDestroy {
     }
 
     LoadContacts(stateId: string): void {
-        this._leadContactService.getArray(Global.BASE_CONTACT_ENDPOINT, stateId)
+        this._leadContactService.getArray(Global.BASE_CONTACT_ENDPOINT + 'GetContacts/', stateId)
             .subscribe(contacts => { this.contacts = contacts; },
             error => this.msg = <any>error);
     }
 
-    editUser(id: number) {
+    editContact(id: number) {
         this.dbops = DBOperation.update;
+        this.SetControlsState(true);
         this.modalTitle = "Edit User";
         this.modalBtnTitle = "Update";
         this.contact = this.contacts.filter(x => x.Id == id)[0];
         this.leadContactFrm.setValue(this.contact);
+        this.modal.open();
+    }
+
+    deleteContact(id: number) {
+        this.dbops = DBOperation.delete;
+        this.SetControlsState(false);
+        this.modalTitle = "Confirm to Delete?";
+        this.modalBtnTitle = "Delete";
+        this.contact = this.contacts.filter(x => x.Id == id)[0];
+        this.leadContactFrm.setValue(this.contact);
+        this.modal.open();
+    }
+
+    addContact() {
+        this.dbops = DBOperation.create;
+        this.SetControlsState(true);
+        this.modalTitle = "Add New User";
+        this.modalBtnTitle = "Add";
+        this.leadContactFrm.reset();
         this.modal.open();
     }
 
@@ -64,7 +84,6 @@ export class LeadContactComponent implements OnInit, OnDestroy {
         });
 
         this.subscription = this._stateService.sourceItem$.subscribe(id => {
-
             if (id) {
                 this.stateId = id;
                 this.LoadContacts(id.toString());
@@ -77,6 +96,25 @@ export class LeadContactComponent implements OnInit, OnDestroy {
         this.msg = "";
 
         switch (this.dbops) {
+            case DBOperation.create:
+                this._leadContactService.post(Global.BASE_CONTACT_ENDPOINT + 'AddContact/' + this.stateId.toString(), formData._value).subscribe(
+                    data => {
+                        if (data == 1) //Success
+                        {
+                            this.msg = "Data successfully added.";
+                            this.LoadContacts(this.stateId.toString());
+                        }
+                        else {
+                            this.msg = "There is some issue in saving records, please contact to system administrator!"
+                        }
+
+                        this.modal.dismiss();
+                    },
+                    error => {
+                        this.msg = error;
+                    }
+                );
+                break;
             case DBOperation.update:
                 this._leadContactService.put(Global.BASE_CONTACT_ENDPOINT, formData._value.Id, formData._value).subscribe(
                     data => {
@@ -96,6 +134,29 @@ export class LeadContactComponent implements OnInit, OnDestroy {
                     }
                 );
                 break;
+            case DBOperation.delete:
+                this._leadContactService.delete(Global.BASE_CONTACT_ENDPOINT, formData._value.Id).subscribe(
+                    data => {
+                        if (data == 1) //Success
+                        {
+                            this.msg = "Data successfully deleted.";
+                            this.LoadContacts(this.stateId.toString());
+                        }
+                        else {
+                            this.msg = "There is some issue in saving records, please contact to system administrator!"
+                        }
+
+                        this.modal.dismiss();
+                    },
+                    error => {
+                        this.msg = error;
+                    }
+                );
+                break;
         }
+    }
+
+    SetControlsState(isEnable: boolean) {
+        isEnable ? this.leadContactFrm.enable() : this.leadContactFrm.disable();
     }
 }

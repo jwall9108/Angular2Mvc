@@ -24,16 +24,16 @@ namespace Angular2MVC.Code
             return context.States.Find(id);
         }
 
-        //public void InsertStudent(Student student)
-        //{
-        //    context.States.Add(student);
-        //}
+        public void AddContact(StateLeadContact contact)
+        {
+            context.StateLeadContacts.Add(contact);
+        }
 
-        //public void DeleteStudent(int studentID)
-        //{
-        //    Student student = context.States.Find(studentID);
-        //    context.States.Remove(student);
-        //}
+        public void DeleteContact(int Id)
+        {
+            var contact = context.StateLeadContacts.Where(x => x.LeadContactId == Id).FirstOrDefault();
+            context.StateLeadContacts.Remove(contact);
+        }
 
         //public void UpdateStudent(State student)
         //{

@@ -13,7 +13,7 @@
         </div>
         <div class="row " style="padding-bottom:10px">
             <div class="col-sm-2">
-                <div class="btn btn-default">Add <i class="glyphicon glyphicon-plus"></i></div>
+                <div class="btn btn-default" (click)="addContact()">Add <i class="glyphicon glyphicon-plus"></i></div>
             </div>
         </div>
         <div *ngIf='contacts && contacts.length==0' class="alert alert-info alert-dismissible" role="alert">
@@ -61,8 +61,8 @@
                     {{contact.AdditionalInfo}}
                 </div>
             </div>
-            <button title="Edit" class="btn btn-primary" (click)="editUser(contact.Id)">Edit</button>
-            <button title="Delete" class="btn btn-danger">Delete</button>
+            <button title="Edit" class="btn btn-primary" (click)="editContact(contact.Id)">Edit</button>
+            <button title="Delete" class="btn btn-danger" (click)="deleteContact(contact.Id)">Delete</button>
             <hr *ngIf='contacts.length - 1 != i' style="border-width:5px" />
         </div>
     </div>

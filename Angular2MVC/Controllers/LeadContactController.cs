@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Linq;
 using Angular2MVC.Models;
+using System.Net;
 
 namespace Angular2MVC.Controllers
 {
@@ -16,24 +17,32 @@ namespace Angular2MVC.Controllers
             stateRepository = new StateRepository(new StateTrackerContext());
         }
 
-        // GET api/<controller>
-        public void Get()
-        {
-        }
-
-        // GET api/<controller>/5
-        public HttpResponseMessage Get(int id)
+        [HttpGet]
+        public HttpResponseMessage GetContacts(int id)
         {
             var contacts = stateRepository.GetStateById(id).StateLeadContacts.Select(x => new StateContactModel(x)).ToList();
-            return ToJson(contacts);
+            return Request.CreateResponse(HttpStatusCode.OK, contacts);
         }
 
-        //public HttpResponseMessage Post([FromBody]TblUser value)
-        //{
-        //    UserDB.TblUsers.Add(value);
-        //    return ToJson(UserDB.SaveChanges());
-        //}
+        [HttpPost]
+        public HttpResponseMessage AddContact([FromUri]int id, [FromBody]StateContactModel value)
+        {
+            var contact = new StateLeadContact()
+            {
+                StateId = id,
+                Name = value.Name,
+                Phone_ = value.Phone,
+                Role = value.Role,
+                Email = value.Email,
+                Additional = value.AdditionalInfo,
+                Fax = value.Fax
+            };
 
+            stateRepository.AddContact(contact);
+            return ToJson(stateRepository.Save());
+        }
+
+        [HttpPut]
         public HttpResponseMessage Put(int id, [FromBody]StateContactModel value)
         {
             var contact = stateRepository.GetStates().SelectMany(x => x.StateLeadContacts).FirstOrDefault(x => x.LeadContactId == id);
@@ -44,12 +53,14 @@ namespace Angular2MVC.Controllers
             contact.Additional = value.AdditionalInfo;
             contact.Fax = value.Fax;
 
-            return ToJson(stateRepository.Save());
+            return Request.CreateResponse(HttpStatusCode.OK, stateRepository.Save());
         }
+
+        [HttpDelete]
         public HttpResponseMessage Delete(int id)
         {
-            UserDB.TblUsers.Remove(UserDB.TblUsers.FirstOrDefault(x => x.Id == id));
-            return ToJson(UserDB.SaveChanges());
+            stateRepository.DeleteContact(id);
+            return ToJson(stateRepository.Save());
         }
     }
 }

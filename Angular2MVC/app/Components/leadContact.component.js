@@ -28,15 +28,33 @@ var LeadContactComponent = (function () {
     };
     LeadContactComponent.prototype.LoadContacts = function (stateId) {
         var _this = this;
-        this._leadContactService.getArray(global_1.Global.BASE_CONTACT_ENDPOINT, stateId)
+        this._leadContactService.getArray(global_1.Global.BASE_CONTACT_ENDPOINT + 'GetContacts/', stateId)
             .subscribe(function (contacts) { _this.contacts = contacts; }, function (error) { return _this.msg = error; });
     };
-    LeadContactComponent.prototype.editUser = function (id) {
+    LeadContactComponent.prototype.editContact = function (id) {
         this.dbops = enum_1.DBOperation.update;
+        this.SetControlsState(true);
         this.modalTitle = "Edit User";
         this.modalBtnTitle = "Update";
         this.contact = this.contacts.filter(function (x) { return x.Id == id; })[0];
         this.leadContactFrm.setValue(this.contact);
+        this.modal.open();
+    };
+    LeadContactComponent.prototype.deleteContact = function (id) {
+        this.dbops = enum_1.DBOperation.delete;
+        this.SetControlsState(false);
+        this.modalTitle = "Confirm to Delete?";
+        this.modalBtnTitle = "Delete";
+        this.contact = this.contacts.filter(function (x) { return x.Id == id; })[0];
+        this.leadContactFrm.setValue(this.contact);
+        this.modal.open();
+    };
+    LeadContactComponent.prototype.addContact = function () {
+        this.dbops = enum_1.DBOperation.create;
+        this.SetControlsState(true);
+        this.modalTitle = "Add New User";
+        this.modalBtnTitle = "Add";
+        this.leadContactFrm.reset();
         this.modal.open();
     };
     LeadContactComponent.prototype.ngOnInit = function () {
@@ -62,6 +80,20 @@ var LeadContactComponent = (function () {
         var _this = this;
         this.msg = "";
         switch (this.dbops) {
+            case enum_1.DBOperation.create:
+                this._leadContactService.post(global_1.Global.BASE_CONTACT_ENDPOINT + 'AddContact/' + this.stateId.toString(), formData._value).subscribe(function (data) {
+                    if (data == 1) {
+                        _this.msg = "Data successfully added.";
+                        _this.LoadContacts(_this.stateId.toString());
+                    }
+                    else {
+                        _this.msg = "There is some issue in saving records, please contact to system administrator!";
+                    }
+                    _this.modal.dismiss();
+                }, function (error) {
+                    _this.msg = error;
+                });
+                break;
             case enum_1.DBOperation.update:
                 this._leadContactService.put(global_1.Global.BASE_CONTACT_ENDPOINT, formData._value.Id, formData._value).subscribe(function (data) {
                     if (data == 1) {
@@ -76,7 +108,24 @@ var LeadContactComponent = (function () {
                     _this.msg = error;
                 });
                 break;
+            case enum_1.DBOperation.delete:
+                this._leadContactService.delete(global_1.Global.BASE_CONTACT_ENDPOINT, formData._value.Id).subscribe(function (data) {
+                    if (data == 1) {
+                        _this.msg = "Data successfully deleted.";
+                        _this.LoadContacts(_this.stateId.toString());
+                    }
+                    else {
+                        _this.msg = "There is some issue in saving records, please contact to system administrator!";
+                    }
+                    _this.modal.dismiss();
+                }, function (error) {
+                    _this.msg = error;
+                });
+                break;
         }
+    };
+    LeadContactComponent.prototype.SetControlsState = function (isEnable) {
+        isEnable ? this.leadContactFrm.enable() : this.leadContactFrm.disable();
     };
     return LeadContactComponent;
 }());

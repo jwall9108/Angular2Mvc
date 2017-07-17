@@ -11,18 +11,30 @@ export class GenericUtilityService<T> {
     constructor(private _http: Http) { }
 
     get(url: string, id: string): Observable<T> {
-        return this._http.get(url+id)
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this._http.get(url + id, options)
             .map((response: Response) => <T>response.json())
             .catch(this.handleError);
-    }
+    } 
 
     getArray(url: string, id: string): Observable<T[]> {
-        return this._http.get(url + id)
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this._http.get(url + id, options)
             .map((response: Response) => <T[]>response.json())
             .catch(this.handleError);
     }
 
-    post(url: string, model: any): Observable<any> {
+    delete(url: string, id: number): Observable<any> {
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        return this._http.delete(url + id, options)
+            .map((response: Response) => <any>response.json())
+            .catch(this.handleError);
+    }
+
+    post(url: string, model: T): Observable<any> {
         let body = JSON.stringify(model);
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
