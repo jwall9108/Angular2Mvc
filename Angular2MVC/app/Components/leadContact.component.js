@@ -54,6 +54,7 @@ var LeadContactComponent = (function () {
             if (id) {
                 _this.stateId = id;
                 _this.LoadContacts(id.toString());
+                _this.msg = null;
             }
         });
     };

@@ -68,6 +68,7 @@ export class LeadContactComponent implements OnInit, OnDestroy {
             if (id) {
                 this.stateId = id;
                 this.LoadContacts(id.toString());
+                this.msg = null;
             }
         });
     }
