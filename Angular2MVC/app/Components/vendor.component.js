@@ -22,15 +22,17 @@ var VendorComponent = (function () {
         this._vendorService = _vendorService;
     }
     VendorComponent.prototype.ngOnDestroy = function () {
-        // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
+    };
+    VendorComponent.prototype.onError = function (error) {
+        this.msg = error;
     };
     VendorComponent.prototype.LoadVendors = function (stateId) {
         var _this = this;
-        this._vendorService.getArray(global_1.Global.BASE_VENDOR_ENDPOINT, stateId)
-            .subscribe(function (vendors) {
-            _this.vendors = vendors;
-        }, function (error) { return _this.msg = error; });
+        if (stateId) {
+            this._vendorService.getArray(global_1.Global.BASE_VENDOR_ENDPOINT, stateId.toString())
+                .subscribe(function (vendors) { _this.vendors = vendors; }, this.onError);
+        }
     };
     VendorComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -39,12 +41,7 @@ var VendorComponent = (function () {
             FirstName: ['', forms_1.Validators.required],
             LastName: ['']
         });
-        this.subscription = this._stateService.sourceItem$.subscribe(function (id) {
-            if (id) {
-                _this.stateId = id;
-                _this.LoadVendors(id.toString());
-            }
-        });
+        this.subscription = this._stateService.sourceItem$.subscribe(function (id) { _this.LoadVendors(id); }, this.onError);
     };
     return VendorComponent;
 }());

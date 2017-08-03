@@ -12,12 +12,14 @@ namespace Angular2MVC.DBContext
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    
+    using System.Diagnostics;
+
     public partial class StateTrackerContext : DbContext
     {
         public StateTrackerContext()
             : base("name=StateTrackerContext")
         {
+            Database.Log = x => Debug.WriteLine(x);
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

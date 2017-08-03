@@ -28,16 +28,18 @@ export class VendorComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        // prevent memory leak when component is destroyed
         this.subscription.unsubscribe();
     }
 
-    LoadVendors(stateId: string): void {
-        this._vendorService.getArray(Global.BASE_VENDOR_ENDPOINT, stateId)
-            .subscribe(vendors => {
-                this.vendors = vendors;
-            },
-            error => this.msg = <any>error);
+    onError(error: any) {
+        this.msg = <any>error;
+    }
+
+    LoadVendors(stateId: any): void {
+        if (stateId) {
+            this._vendorService.getArray(Global.BASE_VENDOR_ENDPOINT, stateId.toString())
+                .subscribe(vendors => { this.vendors = vendors; }, this.onError);
+        }
     }
 
     ngOnInit(): void {
@@ -47,11 +49,6 @@ export class VendorComponent implements OnInit, OnDestroy {
             LastName: ['']
         });
 
-        this.subscription = this._stateService.sourceItem$.subscribe(id => {
-            if (id) {
-                this.stateId = id;
-                this.LoadVendors(id.toString());
-            }
-        });
+        this.subscription = this._stateService.sourceItem$.subscribe(id => { this.LoadVendors(id); }, this.onError);
     }
 }

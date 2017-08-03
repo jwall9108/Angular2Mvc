@@ -27,6 +27,7 @@ namespace Angular2MVC.Controllers
         [HttpPost]
         public HttpResponseMessage AddContact([FromUri]int id, [FromBody]StateContactModel value)
         {
+
             var contact = new StateLeadContact()
             {
                 StateId = id,
@@ -39,6 +40,8 @@ namespace Angular2MVC.Controllers
             };
 
             stateRepository.AddContact(contact);
+
+
             return ToJson(stateRepository.Save());
         }
 
